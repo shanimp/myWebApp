@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using MyBackendApp.Services;
 using myProject02.Models;
+using myProject02.Services;
 
 namespace myProject02
 {
@@ -8,6 +10,8 @@ namespace myProject02
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddScoped<Ivoterservice, VoterService>();
 
             // Add services to the container.
 
