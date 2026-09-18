@@ -12,6 +12,7 @@ namespace myProject02
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddScoped<Ivoterservice, VoterService>();
+            builder.Services.AddScoped<IRoleService,RoleService>();
 
             // Add services to the container.
 
