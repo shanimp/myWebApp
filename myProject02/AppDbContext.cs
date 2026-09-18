@@ -14,6 +14,7 @@ namespace myProject02.Models
     }
         public DbSet<Voter> Voters { get; set; }
         public DbSet<AuditLog> Audit { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
