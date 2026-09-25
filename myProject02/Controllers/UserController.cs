@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using myProject02.DTOs;
 using myProject02.Services.Interfaces;
-using static System.Net.Mime.MediaTypeNames;
+using myProject02.Services.Pdf;
 
 namespace myProject02.Controllers
 {
@@ -10,10 +10,14 @@ namespace myProject02.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly UserPdfService _pdfService;
 
-        public UserController(IUserService userService)
+        public UserController(
+            IUserService userService,
+            UserPdfService pdfService)
         {
             _userService = userService;
+            _pdfService = pdfService;
         }
 
         // GET: api/User
@@ -26,7 +30,7 @@ namespace myProject02.Controllers
         }
 
         // GET: api/User/1
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<UserDto>> GetUserById(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -66,7 +70,7 @@ namespace myProject02.Controllers
         }
 
         // PUT: api/User/1
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult<UserDto>> UpdateUser(
             int id,
             UpdateUserDto dto)
@@ -95,7 +99,7 @@ namespace myProject02.Controllers
         }
 
         // DELETE: api/User/1
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var deleted = await _userService.DeleteUserAsync(id);
@@ -114,13 +118,29 @@ namespace myProject02.Controllers
             });
         }
 
+        // GET: api/User/role/Admin
         [HttpGet("role/{roleName}")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersByRole(string roleName)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersByRole(
+            string roleName)
         {
             var users = await _userService.GetUsersByRoleNameAsync(roleName);
 
             return Ok(users);
         }
+
+        // GET: api/User/report/pdf
+        [HttpGet("report/pdf")]
+        public async Task<IActionResult> GenerateUserReport()
+        {
+            var users = (await _userService.GetAllUsersAsync())
+                .ToList();
+
+            var pdf = _pdfService.GenerateUserPdf(users);
+
+            return File(
+                pdf,
+                "application/pdf",
+                $"UserReport_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
+        }
     }
 }
-

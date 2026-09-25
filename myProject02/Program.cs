@@ -3,6 +3,8 @@ using MyBackendApp.Services;
 using myProject02.Models;
 using myProject02.Services;
 using myProject02.Services.Interfaces;
+using myProject02.Services.Pdf;
+using QuestPDF.Infrastructure;
 
 namespace myProject02
 {
@@ -11,10 +13,14 @@ namespace myProject02
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            QuestPDF.Settings.License = LicenseType.Evaluation;
 
             builder.Services.AddScoped<Ivoterservice, VoterService>();
             builder.Services.AddScoped<IRoleService,RoleService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<VoterPdfService>(); 
+            builder.Services.AddScoped<UserPdfService>();
+            builder.Services.AddScoped<PdfReportService>();
 
             // Add services to the container.
 
