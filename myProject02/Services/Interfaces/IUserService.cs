@@ -16,6 +16,7 @@ namespace myProject02.Services.Interfaces
         Task<bool> DeleteUserAsync(int id);
 
         Task<bool> UserExistsAsync(int id);
+        Task<IEnumerable<UserDto>> GetUsersByRoleNameAsync(string roleName);
     }
 }
 

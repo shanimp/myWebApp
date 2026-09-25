@@ -148,6 +148,21 @@ namespace myProject02.Services
             return await _context.Users
                 .AnyAsync(u => u.Id == id);
         }
+
+        public async Task<IEnumerable<UserDto>> GetUsersByRoleNameAsync(string roleName)
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .Where(u => u.Role.Name == roleName)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    RoleId = u.RoleId,
+                    RoleName = u.Role.Name
+                })
+                .ToListAsync();
+        }
     }
 }
 

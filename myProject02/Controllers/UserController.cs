@@ -113,6 +113,14 @@ namespace myProject02.Controllers
                 message = "User deleted successfully."
             });
         }
+
+        [HttpGet("role/{roleName}")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersByRole(string roleName)
+        {
+            var users = await _userService.GetUsersByRoleNameAsync(roleName);
+
+            return Ok(users);
+        }
     }
 }
 
