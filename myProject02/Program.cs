@@ -25,6 +25,18 @@ namespace myProject02
             builder.Services.AddScoped<ICandidateService, CandidateService>();
             builder.Services.AddScoped<IElectionService, ElectionService>();
 
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ReactPolicy", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -37,6 +49,8 @@ namespace myProject02
             // Configure the HTTP request pipeline.
 
             app.UseHttpsRedirection();
+
+            app.UseCors("ReactPolicy");
 
             app.UseAuthorization();
 
