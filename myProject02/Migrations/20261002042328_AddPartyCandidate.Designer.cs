@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using myProject02.Models;
 
@@ -11,9 +12,11 @@ using myProject02.Models;
 namespace myProject02.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261002042328_AddPartyCandidate")]
+    partial class AddPartyCandidate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,45 +77,6 @@ namespace myProject02.Migrations
                     b.HasIndex("PartyId");
 
                     b.ToTable("Candidates");
-                });
-
-            modelBuilder.Entity("myProject02.Models.Election", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ElectionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ElectionName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Elections");
-                });
-
-            modelBuilder.Entity("myProject02.Models.ElectionParty", b =>
-                {
-                    b.Property<int>("ElectionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ElectionId", "PartyId");
-
-                    b.HasIndex("PartyId");
-
-                    b.ToTable("ElectionParties");
                 });
 
             modelBuilder.Entity("myProject02.Models.Party", b =>
@@ -213,25 +177,6 @@ namespace myProject02.Migrations
                     b.Navigation("Party");
                 });
 
-            modelBuilder.Entity("myProject02.Models.ElectionParty", b =>
-                {
-                    b.HasOne("myProject02.Models.Election", "Election")
-                        .WithMany("ElectionParties")
-                        .HasForeignKey("ElectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("myProject02.Models.Party", "Party")
-                        .WithMany("ElectionParties")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Election");
-
-                    b.Navigation("Party");
-                });
-
             modelBuilder.Entity("myProject02.Models.User", b =>
                 {
                     b.HasOne("myProject02.Models.Role", "Role")
@@ -243,16 +188,9 @@ namespace myProject02.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("myProject02.Models.Election", b =>
-                {
-                    b.Navigation("ElectionParties");
-                });
-
             modelBuilder.Entity("myProject02.Models.Party", b =>
                 {
                     b.Navigation("Candidates");
-
-                    b.Navigation("ElectionParties");
                 });
 
             modelBuilder.Entity("myProject02.Models.Role", b =>

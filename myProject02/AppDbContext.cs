@@ -16,6 +16,12 @@ namespace myProject02.Models
         public DbSet<AuditLog> Audit { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Party> Parties { get; set; }
+        public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Election> Elections { get; set; }
+
+        public DbSet<ElectionParty> ElectionParties { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +31,34 @@ namespace myProject02.Models
                 .HasOne(u => u.Role)
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Party>()
+                .HasMany(p => p.Candidates)
+                .WithOne(c => c.Party)
+                .HasForeignKey(c => c.PartyId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Election -> ElectionParty
+            modelBuilder.Entity<ElectionParty>()
+                .HasKey(ep => new
+                {
+                    ep.ElectionId,
+                    ep.PartyId
+                });
+
+
+            modelBuilder.Entity<ElectionParty>()
+                .HasOne(ep => ep.Election)
+                .WithMany(e => e.ElectionParties)
+                .HasForeignKey(ep => ep.ElectionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Party -> ElectionParty
+            modelBuilder.Entity<ElectionParty>()
+                .HasOne(ep => ep.Party)
+                .WithMany(p => p.ElectionParties)
+                .HasForeignKey(ep => ep.PartyId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 

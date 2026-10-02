@@ -21,6 +21,9 @@ namespace myProject02
             builder.Services.AddScoped<VoterPdfService>(); 
             builder.Services.AddScoped<UserPdfService>();
             builder.Services.AddScoped<PdfReportService>();
+            builder.Services.AddScoped<IPartyService, PartyService>();
+            builder.Services.AddScoped<ICandidateService, CandidateService>();
+            builder.Services.AddScoped<IElectionService, ElectionService>();
 
             // Add services to the container.
 
